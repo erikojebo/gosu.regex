@@ -31,6 +31,7 @@ namespace Gosu.Regex
 
             for (int index = 0; index < chars.Length; index++)
             {
+                var isLastChar = index == chars.Length - 1;
                 var currentChar = expression[index];
 
                 if (currentChar == '*')
@@ -40,7 +41,7 @@ namespace Gosu.Regex
                 if (IsNextChar('*', expression, index))
                 {
                     previousState.AddEdgeFor(chars[index], previousState);
-                    previousState.IsAccepting = true;
+                    previousState.IsAccepting = isLastChar;
                 }
                 else
                 {

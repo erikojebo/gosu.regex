@@ -52,6 +52,30 @@ namespace Gosu.Regex
         {
             "A*".ShouldMatch("AAA");
         }
+
+        [Test]
+        public void Character_with_star_operator_followed_by_other_character_accepts_input_consisting_of_only_second_character()
+        {
+            "A*B".ShouldMatch("B");
+        }
+        
+        [Test]
+        public void Character_with_star_operator_followed_by_other_character_accepts_input_consisting_of_first_char_followed_by_second_character()
+        {
+            "A*B".ShouldMatch("AB");
+        }
+        
+        [Test]
+        public void Character_with_star_operator_followed_by_other_character_accepts_input_consisting_of_first_char_repeated_and_then_followed_by_second_character()
+        {
+            "A*B".ShouldMatch("AAAAB");
+        }
+        
+        [Test]
+        public void Character_with_star_operator_followed_by_other_character_should_not_accept_first_character_only()
+        {
+            "A*B".ShouldNotMatch("A");
+        }
     }
 
     public static class RegexSpecExtensions

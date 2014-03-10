@@ -1,30 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Gosu.Regex.StateMachines
 {
-    public class Edge : EdgeBase
+    public class FreeEdge : EdgeBase
     {
-        public readonly char Input;
-
-        public Edge(char input, State nextState) : base(nextState)
+        public FreeEdge(State nextState) : base(nextState)
         {
-            Input = input;
         }
 
         public override bool Accepts(char input)
         {
-            return input == Input;
+            return true;
         }
 
         public override IEnumerable<char> Consume(IEnumerable<char> input)
         {
-            return input.Skip(1);
+            return input;
         }
 
         public override string ToString()
         {
-            return Input.ToString();
+            return "Free";
         }
     }
 }

@@ -5,7 +5,18 @@ namespace Gosu.Regex.StateMachines
 {
     public class State
     {
-        private readonly IList<Edge> _edges = new List<Edge>();
+        private readonly string _name;
+        private readonly IList<EdgeBase> _edges = new List<EdgeBase>();
+
+        public State() : this(null)
+        {
+            
+        }
+
+        public State(string name)
+        {
+            _name = name;
+        }
 
         public bool IsAccepting { get; set; }
 
@@ -14,14 +25,32 @@ namespace Gosu.Regex.StateMachines
             _edges.Add(new Edge(input, nextState));
         }
 
-        public bool AcceptsInput(char input)
+        public void AddFreeEdgeTo(State nextState)
         {
-            return _edges.Any(e => e.IsMatch(input));
+            if (nextState == this)
+                throw new InvalidStateMachineException("Cannot add epsilon transision from a given state to itself, since that would open up for infinite loops in the state machine");
+
+            _edges.Add(new FreeEdge(nextState));
         }
 
-        public State NextState(char input)
+        public bool IsMatch(IEnumerable<char> input)
         {
-            return _edges.First(e => e.IsMatch(input)).NextState;
+            if (!input.Any())
+                return IsAccepting;
+            
+            var currentChar = input.First();
+
+            var matchingEdges = _edges.Where(x => x.Accepts(currentChar));
+
+            return matchingEdges.Any(x => x.IsMatch(input));
+        }
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrWhiteSpace(_name))
+                return _name;
+
+            return base.ToString();
         }
     }
 }

@@ -43,12 +43,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StateMachines\Edge.cs" />
+    <Compile Include="StateMachines\EdgeBase.cs" />
     <Compile Include="StateMachines\FiniteStateMachine.cs" />
     <Compile Include="Regex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegexSpecs.cs" />
+    <Compile Include="StateMachines\FiniteStateMachineSpecs_EpsilonTransitions.cs" />
     <Compile Include="StateMachines\FiniteStateMachineSpecs_LetterDigit.cs" />
     <Compile Include="StateMachines\FiniteStateMachineSpecs.cs" />
+    <Compile Include="StateMachines\FreeEdge.cs" />
+    <Compile Include="StateMachines\InvalidStateMachineException.cs" />
     <Compile Include="StateMachines\State.cs" />
   </ItemGroup>
   <ItemGroup>

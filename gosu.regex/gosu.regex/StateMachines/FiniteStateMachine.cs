@@ -19,20 +19,7 @@ namespace Gosu.Regex.StateMachines
 
         public bool IsMatch(string input)
         {
-            return IsMatch(input, _states.First());
-        }
-
-        private bool IsMatch(IEnumerable<char> input, State currentState)
-        {
-            if (!input.Any())
-                return currentState.IsAccepting;
-
-            var currentChar = input.First();
-
-            if (currentState.AcceptsInput(currentChar))
-                return IsMatch(input.Skip(1), currentState.NextState(currentChar));
-
-            return false;
+            return _states.First().IsMatch(input);
         }
     }
 }

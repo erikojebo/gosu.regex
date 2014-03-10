@@ -82,7 +82,31 @@ namespace Gosu.Regex
         {
             "A*B".ShouldMatch("B");
         }
-        
+
+        [Test]
+        public void Character_with_plus_operator_does_not_accept_empty_input()
+        {
+            "A+".ShouldNotMatch("");
+        }
+
+        [Test]
+        public void Character_with_plus_operator_does_not_accept_other_character()
+        {
+            "A+".ShouldNotMatch("B");
+        }
+
+        [Test]
+        public void Character_with_plus_operator_accept_single_instance_of_character()
+        {
+            "A+".ShouldMatch("A");
+        }
+
+        [Test]
+        public void Character_with_plus_operator_accept_repeated_instances_of_character()
+        {
+            "A+".ShouldMatch("AAA");
+        }
+
         [Test]
         public void Character_with_plus_operator_followed_by_other_character_accepts_input_consisting_of_first_char_followed_by_second_character()
         {
@@ -105,6 +129,54 @@ namespace Gosu.Regex
         public void Character_with_plus_operator_followed_by_other_character_should_not_accept_second_character_only()
         {
             "A+B".ShouldNotMatch("B");
+        }
+
+        [Test]
+        public void Character_with_question_marks_operator_accepts_empty_input()
+        {
+            "A?".ShouldMatch("");
+        }
+        
+        [Test]
+        public void Character_with_question_marks_operator_does_not_accept_other_character()
+        {
+            "A?".ShouldNotMatch("B");
+        }
+        
+        [Test]
+        public void Character_with_question_marks_operator_accept_single_instance_of_character()
+        {
+            "A?".ShouldMatch("A");
+        }
+
+        [Test]
+        public void Character_with_question_marks_operator_accept_repeated_instances_of_character()
+        {
+            "A?".ShouldMatch("AAA");
+        }
+
+        [Test]
+        public void Character_with_question_marks_operator_followed_by_other_character_accepts_input_consisting_of_first_char_followed_by_second_character()
+        {
+            "A?B".ShouldMatch("AB");
+        }
+
+        [Test]
+        public void Character_with_question_marks_operator_followed_by_other_character_should_not_accept_input_consisting_of_first_char_repeated_and_then_followed_by_second_character()
+        {
+            "A?B".ShouldMatch("AAB");
+        }
+
+        [Test]
+        public void Character_with_question_marks_operator_followed_by_other_character_should_not_accept_first_character_only()
+        {
+            "A?B".ShouldNotMatch("A");
+        }
+
+        [Test]
+        public void Character_with_question_marks_operator_followed_by_other_character_should_accept_second_character_only()
+        {
+            "A?B".ShouldMatch("B");
         }
     }
 

@@ -50,5 +50,15 @@ namespace Gosu.Regex.StateMachines
 
             Assert.IsFalse(machine.IsMatch(""));
         }
+
+        [Test]
+        [ExpectedException(typeof(InvalidStateMachineException))]
+        public void Adding_an_epsilon_transition_from_state_to_itself_yields_error()
+        {
+            var state = new State();
+            state.AddFreeEdgeTo(state);
+
+            var machine = new FiniteStateMachine(state);
+        }
     }
 }

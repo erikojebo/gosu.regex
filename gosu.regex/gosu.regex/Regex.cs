@@ -34,7 +34,7 @@ namespace Gosu.Regex
                 var isLastChar = index == chars.Length - 1;
                 var currentChar = expression[index];
 
-                if (currentChar == '*' || currentChar == '+')
+                if (currentChar == '*' || currentChar == '+' || currentChar == '?')
                     continue;
 
                 if (IsNextChar('*', expression, index))
@@ -54,6 +54,11 @@ namespace Gosu.Regex
                     {
                         currentState.AddEdgeFor(chars[index], currentState);
                         currentState.IsAccepting = isLastChar;
+                    }
+                    else if (IsNextChar('?', expression, index))
+                    {
+                        previousState.AddFreeEdgeTo(currentState);
+                        previousState.IsAccepting = isLastChar;
                     }
 
                     previousState = currentState;

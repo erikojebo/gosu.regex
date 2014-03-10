@@ -12,9 +12,9 @@ namespace Gosu.Regex.StateMachines
             Input = input;
         }
 
-        public override bool Accepts(char input)
+        public override bool Accepts(IEnumerable<char> input)
         {
-            return input == Input;
+            return input.FirstOrDefault() == Input;
         }
 
         public override IEnumerable<char> Consume(IEnumerable<char> input)

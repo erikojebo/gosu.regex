@@ -8,7 +8,7 @@ namespace Gosu.Regex.StateMachines
         {
         }
 
-        public override bool Accepts(char input)
+        public override bool Accepts(IEnumerable<char> input)
         {
             return true;
         }

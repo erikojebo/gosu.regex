@@ -150,9 +150,9 @@ namespace Gosu.Regex
         }
 
         [Test]
-        public void Character_with_question_marks_operator_accept_repeated_instances_of_character()
+        public void Character_with_question_marks_operator_does_not_accept_repeated_instances_of_character()
         {
-            "A?".ShouldMatch("AAA");
+            "A?".ShouldNotMatch("AAA");
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace Gosu.Regex
         [Test]
         public void Character_with_question_marks_operator_followed_by_other_character_should_not_accept_input_consisting_of_first_char_repeated_and_then_followed_by_second_character()
         {
-            "A?B".ShouldMatch("AAB");
+            "A?B".ShouldNotMatch("AAB");
         }
 
         [Test]

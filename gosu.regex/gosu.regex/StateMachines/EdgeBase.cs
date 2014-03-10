@@ -11,7 +11,7 @@ namespace Gosu.Regex.StateMachines
             NextState = nextState;
         }
 
-        public abstract bool Accepts(char input);
+        public abstract bool Accepts(IEnumerable<char> input);
         
         public abstract IEnumerable<char> Consume(IEnumerable<char> input);
 

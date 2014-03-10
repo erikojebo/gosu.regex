@@ -35,12 +35,10 @@ namespace Gosu.Regex.StateMachines
 
         public bool IsMatch(IEnumerable<char> input)
         {
-            if (!input.Any())
-                return IsAccepting;
-            
-            var currentChar = input.First();
+            if (!input.Any() && IsAccepting)
+                return true;
 
-            var matchingEdges = _edges.Where(x => x.Accepts(currentChar));
+            var matchingEdges = _edges.Where(x => x.Accepts(input));
 
             return matchingEdges.Any(x => x.IsMatch(input));
         }

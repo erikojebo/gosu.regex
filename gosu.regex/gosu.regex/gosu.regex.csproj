@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RegexCharacterClassSpecs.cs" />
+    <Compile Include="RegexCharacterClass.cs" />
     <Compile Include="RegexSpecExtensions.cs" />
     <Compile Include="StateMachines\Edge.cs" />
     <Compile Include="StateMachines\EdgeBase.cs" />

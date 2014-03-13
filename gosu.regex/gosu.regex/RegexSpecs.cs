@@ -212,7 +212,19 @@ namespace Gosu.Regex
         [Test]
         public void Dot_operator_does_not_match_newline_character()
         {
-            ".".ShouldMatch("\n");
+            ".".ShouldNotMatch("\n");
+        }
+
+        [Test]
+        public void Dot_operator_does_not_match_empty_string()
+        {
+            ".".ShouldNotMatch("");
+        }
+
+        [Test]
+        public void Escaped_dot_matches_dot_character()
+        {
+            "\\.".ShouldMatch(".");
         }
     }
 }

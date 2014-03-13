@@ -29,13 +29,21 @@ namespace Gosu.Regex
 
             var chars = expression.ToArray();
 
+            var isInEscapedState = false;
+
             for (int index = 0; index < chars.Length; index++)
             {
                 var isLastChar = index == chars.Length - 1;
                 var currentChar = expression[index];
 
-                if (currentChar == '*' || currentChar == '+' || currentChar == '?')
+                if ((currentChar == '*' || currentChar == '+' || currentChar == '?') && !isInEscapedState)
                     continue;
+
+                if (currentChar == '\\')
+                {
+                    isInEscapedState = true;
+                    continue;
+                }
 
                 if (IsNextChar('*', expression, index))
                 {
@@ -46,7 +54,7 @@ namespace Gosu.Regex
                 {
                     var currentState = new State();
 
-                    if (currentChar == '.')
+                    if (currentChar == '.' && !isInEscapedState)
                     {
                         previousState.AddWildcardEdgeTo(currentState);
                     }
@@ -70,6 +78,8 @@ namespace Gosu.Regex
 
                     previousState = currentState;
                 }
+
+                isInEscapedState = false;
             }
 
             _states.Last().IsAccepting = true;

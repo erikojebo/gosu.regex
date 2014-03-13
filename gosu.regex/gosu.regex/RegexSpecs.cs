@@ -222,9 +222,57 @@ namespace Gosu.Regex
         }
 
         [Test]
+        public void Escaped_dot_followed_by_dot_operator_matches_dot_followed_by_letter()
+        {
+            "\\..".ShouldMatch(".A");
+        }
+
+        [Test]
         public void Escaped_dot_matches_dot_character()
         {
             "\\.".ShouldMatch(".");
+        }
+        
+        [Test]
+        public void Escaped_dot_does_not_match_letter()
+        {
+            "\\.".ShouldNotMatch("A");
+        }
+
+        [Test]
+        public void Character_followed_by_escaped_question_mark_matches_same_character_followed_by_literal_question_mark()
+        {
+            "A\\?".ShouldMatch("A?");
+        }
+        
+        [Test]
+        public void Character_followed_by_escaped_question_mark_does_not_match_same_character()
+        {
+            "A\\?".ShouldNotMatch("A");
+        }
+        
+        [Test]
+        public void Character_followed_by_escaped_question_mark_does_not_match_empty_string()
+        {
+            "A\\?".ShouldNotMatch("");
+        }
+
+        [Test]
+        public void Character_followed_by_escaped_asterisk_matches_same_character_followed_by_literal_asterisk()
+        {
+            "A\\*".ShouldMatch("A*");
+        }
+
+        [Test]
+        public void Character_followed_by_escaped_asterisk_does_not_match_same_character()
+        {
+            "A\\*".ShouldNotMatch("A");
+        }
+
+        [Test]
+        public void Character_followed_by_escaped_asterisk_does_not_match_empty_string()
+        {
+            "A\\*".ShouldNotMatch("");
         }
     }
 }

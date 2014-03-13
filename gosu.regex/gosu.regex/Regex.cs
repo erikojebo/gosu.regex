@@ -46,7 +46,14 @@ namespace Gosu.Regex
                 {
                     var currentState = new State();
 
-                    previousState.AddEdgeFor(currentChar, currentState);
+                    if (currentChar == '.')
+                    {
+                        previousState.AddWildcardEdgeTo(currentState);
+                    }
+                    else
+                    {
+                        previousState.AddEdgeFor(currentChar, currentState);                        
+                    }
 
                     _states.Add(currentState);
 

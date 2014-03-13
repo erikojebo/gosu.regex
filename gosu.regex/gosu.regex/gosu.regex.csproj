@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RegexSpecExtensions.cs" />
     <Compile Include="StateMachines\Edge.cs" />
     <Compile Include="StateMachines\EdgeBase.cs" />
     <Compile Include="StateMachines\FiniteStateMachine.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="StateMachines\FreeEdge.cs" />
     <Compile Include="StateMachines\InvalidStateMachineException.cs" />
     <Compile Include="StateMachines\State.cs" />
+    <Compile Include="StateMachines\WildcardEdge.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

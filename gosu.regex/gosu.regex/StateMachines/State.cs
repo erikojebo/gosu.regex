@@ -33,6 +33,11 @@ namespace Gosu.Regex.StateMachines
             _edges.Add(new FreeEdge(nextState));
         }
 
+        public void AddWildcardEdgeTo(State nextState)
+        {
+            _edges.Add(new WildcardEdge(nextState));
+        }
+
         public bool IsMatch(IEnumerable<char> input)
         {
             if (!input.Any() && IsAccepting)

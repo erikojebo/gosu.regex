@@ -178,35 +178,41 @@ namespace Gosu.Regex
         {
             "A?B".ShouldMatch("B");
         }
-    }
 
-    public static class RegexSpecExtensions
-    {
-        public static void ShouldMatch(this string expression, string input)
+        [Test]
+        public void Dot_operator_matches_lowercase_letter()
         {
-            ShouldMatch(new Regex(expression), input);
+            ".".ShouldMatch("a");
         }
 
-        public static void ShouldMatch(this Regex expression, string input)
+        [Test]
+        public void Dot_operator_matches_uppercase_letter()
         {
-            AssertMatch(expression, input, true);
+            ".".ShouldMatch("A");
+        }
+
+        [Test]
+        public void Dot_operator_matches_digit()
+        {
+            ".".ShouldMatch("A");
+        }
+
+        [Test]
+        public void Dot_operator_matches_space_character()
+        {
+            ".".ShouldMatch(" ");
         }
         
-        public static void ShouldNotMatch(this string expression, string input)
+        [Test]
+        public void Dot_operator_matches_special_character()
         {
-            ShouldNotMatch(new Regex(expression), input);
+            ".".ShouldMatch("&");
         }
 
-        public static void ShouldNotMatch(this Regex expression, string input)
+        [Test]
+        public void Dot_operator_does_not_match_newline_character()
         {
-            AssertMatch(expression, input, false);
-        }
-
-        private static void AssertMatch(Regex expression, string input, bool expected)
-        {
-            var actual = expression.IsMatch(input);
-
-            Assert.AreEqual(actual, expected);
+            ".".ShouldMatch("\n");
         }
     }
 }

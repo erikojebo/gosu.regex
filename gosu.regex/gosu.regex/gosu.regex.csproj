@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RegexAcceptanceSpecs.cs" />
     <Compile Include="RegexCharacterClassSpecs.cs" />
     <Compile Include="RegexCharacterClass.cs" />
     <Compile Include="RegexSpecExtensions.cs" />

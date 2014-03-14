@@ -37,7 +37,7 @@ namespace Gosu.Regex
                 var currentChar = expression[index];
                 List<char> currentCharacterClassDefinition = null;
 
-                if ((currentChar == '+' || currentChar == '?') && !isInEscapedState)
+                if (currentChar == '+' && !isInEscapedState)
                     continue;
 
                 if (currentChar == '\\')
@@ -66,6 +66,15 @@ namespace Gosu.Regex
 
                     previousState = secondLastState;
                 }
+                else if (currentChar == '?' && !isInEscapedState)
+                {
+                    var secondLastState = _states[_states.Count - 2];
+
+                    secondLastState.AddFreeEdgeTo(previousState);
+
+                    secondLastState.IsAccepting = isLastChar;
+                    previousState.IsAccepting = isLastChar;
+                }
                 else
                 {
                     var currentState = new State();
@@ -90,12 +99,7 @@ namespace Gosu.Regex
                         currentState.AddEdgeFor(chars[index], currentState);
                         currentState.IsAccepting = isLastChar;
                     }
-                    else if (IsNextChar('?', expression, index))
-                    {
-                        previousState.AddFreeEdgeTo(currentState);
-                        previousState.IsAccepting = isLastChar;
-                    }
-
+                    
                     previousState = currentState;
                 }
 

@@ -316,17 +316,35 @@ namespace Gosu.Regex
         {
             "A[0-9]*B".ShouldMatch("AB");
         }
+
+        [Test]
+        public void A_DIGIT_CLASS_question_mark_B_matches_A1B()
+        {
+            "A[0-9]?B".ShouldMatch("A1B");
+        }
         
+        [Test]
+        public void A_DIGIT_CLASS_question_mark_B_does_not_match_A12B()
+        {
+            "A[0-9]?B".ShouldNotMatch("A12B");
+        }
+
+        [Test]
+        public void A_DIGIT_CLASS_question_mark_B_matches_AB()
+        {
+            "A[0-9]?B".ShouldMatch("AB");
+        }
+
         [Test]
         public void A_NEGATED_DIGIT_CLASS_question_mark_B_matches_AZB()
         {
-            "A[^0-9]?B".ShouldNotMatch("AZB");
+            "A[^0-9]?B".ShouldMatch("AZB");
         }
         
         [Test]
         public void A_NEGATED_DIGIT_CLASS_question_mark_B_matches_AB()
         {
-            "A[^0-9]?B".ShouldNotMatch("AB");
+            "A[^0-9]?B".ShouldMatch("AB");
         }
     }
 }

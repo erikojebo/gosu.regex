@@ -274,5 +274,23 @@ namespace Gosu.Regex
         {
             "A\\*".ShouldNotMatch("");
         }
+
+        [Test]
+        public void Character_class_should_match_character_in_the_class()
+        {
+            "[0-9]".ShouldMatch("8");
+        }
+        
+        [Test]
+        public void Character_class_with_all_digits_but_one_should_not_match_the_one_remaining_digit()
+        {
+            "[1-9]".ShouldNotMatch("0");
+        }
+        
+        [Test]
+        public void Character_class_with_all_digits_should_not_match_letter()
+        {
+            "[0-9]".ShouldNotMatch("a");
+        }
     }
 }

@@ -38,6 +38,12 @@ namespace Gosu.Regex.StateMachines
             _edges.Add(new WildcardEdge(nextState));
         }
 
+        public void AddCharacterClassEdgeFor(IEnumerable<char> characterClassDefinition, State nextState)
+        {
+            var characterClass = RegexCharacterClass.Parse(characterClassDefinition);
+            _edges.Add(new CharacterClassEdge(characterClass, nextState));
+        }
+
         public bool IsMatch(IEnumerable<char> input)
         {
             if (!input.Any() && IsAccepting)

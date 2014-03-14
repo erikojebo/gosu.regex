@@ -5,16 +5,38 @@ namespace Gosu.Regex
 {
     public class RegexCharacterClass
     {
-        private readonly IList<char> _characters = new List<char>();
+        private readonly IEnumerable<char> _characters;
         private readonly bool _isNegated;
 
-        public RegexCharacterClass(string classDefinition)
+        private RegexCharacterClass(IEnumerable<char> characters, bool isNegated)
         {
-            var classContent = classDefinition.Substring(1, classDefinition.Length - 2);
+            _characters = characters;
+            _isNegated = isNegated;
+        }
 
-            _isNegated = classContent.First() == '^';
+        public bool Contains(char input)
+        {
+            return _characters.Contains(input) ^ _isNegated;
+        }
 
-            for (int i = 0; i < classContent.Length; i++)
+        public static RegexCharacterClass Parse(IEnumerable<char> classDefinition)
+        {
+            var characters = new List<char>();
+            var isNegated = false;
+
+            var length = classDefinition.Count();
+
+            var classContent = classDefinition.Skip(1).Take(length - 2).ToList();
+
+            // If the first character is a negation operator, skip it so that it is not included in the actual
+            // character class
+            if (classContent.First() == '^')
+            {
+                isNegated = true;
+                classContent = classContent.Skip(1).ToList();
+            }
+            
+            for (int i = 0; i < classContent.Count; i++)
             {
                 var currentChar = classContent[i];
                 var isFirstChar = i == 0;
@@ -28,20 +50,17 @@ namespace Gosu.Regex
                     // so start from the second char in the range
                     for (int charInRange = rangeStartChar + 1; charInRange <= rangeEndChar; charInRange++)
                     {
-                        _characters.Add((char)charInRange);
+                        characters.Add((char)charInRange);
                     }
 
                     i++;
                     continue;
                 }
 
-                _characters.Add(currentChar);
+                characters.Add(currentChar);
             }
-        }
 
-        public bool Contains(char input)
-        {
-            return _characters.Contains(input) ^ _isNegated;
+            return new RegexCharacterClass(characters, isNegated);
         }
     }
 }

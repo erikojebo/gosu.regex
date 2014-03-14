@@ -58,6 +58,15 @@ namespace Gosu.Regex
                     {
                         previousState.AddWildcardEdgeTo(currentState);
                     }
+                    else if (currentChar == '[')
+                    {
+                        var classDefinition = chars.Skip(index).TakeWhile(x => x != ']')
+                            .Concat(new [] { ']' })
+                            .ToList();
+
+                        index += classDefinition.Count;
+                        previousState.AddCharacterClassEdgeFor(classDefinition, currentState);
+                    }
                     else
                     {
                         previousState.AddEdgeFor(currentChar, currentState);                        

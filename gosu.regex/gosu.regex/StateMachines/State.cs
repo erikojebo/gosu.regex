@@ -48,7 +48,9 @@ namespace Gosu.Regex.StateMachines
 
             var matchingEdges = _edges.Where(x => x.Accepts(input));
 
-            return matchingEdges.Any(x => x.IsMatch(input));
+            var isMatch = matchingEdges.Any(x => x.IsMatch(input));
+
+            return isMatch;
         }
 
         public override string ToString()

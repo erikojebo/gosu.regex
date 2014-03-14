@@ -7,9 +7,11 @@ namespace Gosu.Regex
     {
         private readonly IEnumerable<char> _characters;
         private readonly bool _isNegated;
+        private string _classDefinition;
 
-        private RegexCharacterClass(IEnumerable<char> characters, bool isNegated)
+        private RegexCharacterClass(IEnumerable<char> classDefinition, IEnumerable<char> characters, bool isNegated)
         {
+            _classDefinition = string.Join("", classDefinition);
             _characters = characters;
             _isNegated = isNegated;
         }
@@ -21,7 +23,7 @@ namespace Gosu.Regex
 
         public override string ToString()
         {
-            return string.Join("", _characters);
+            return _classDefinition;
         }
 
         public static RegexCharacterClass Parse(IEnumerable<char> classDefinition)
@@ -65,7 +67,7 @@ namespace Gosu.Regex
                 characters.Add(currentChar);
             }
 
-            return new RegexCharacterClass(characters, isNegated);
+            return new RegexCharacterClass(classDefinition, characters, isNegated);
         }
     }
 }

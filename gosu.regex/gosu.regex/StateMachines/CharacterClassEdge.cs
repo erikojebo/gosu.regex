@@ -14,7 +14,7 @@ namespace Gosu.Regex.StateMachines
 
         public override bool Accepts(IEnumerable<char> input)
         {
-            return _characterClass.Contains(input.First());
+            return input.Any() && _characterClass.Contains(input.First());
         }
 
         public override IEnumerable<char> Consume(IEnumerable<char> input)

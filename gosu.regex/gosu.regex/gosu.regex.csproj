@@ -45,6 +45,7 @@
     <Compile Include="RegexCharacterClassSpecs.cs" />
     <Compile Include="RegexCharacterClass.cs" />
     <Compile Include="RegexSpecExtensions.cs" />
+    <Compile Include="StateMachines\CharacterClassEdge.cs" />
     <Compile Include="StateMachines\Edge.cs" />
     <Compile Include="StateMachines\EdgeBase.cs" />
     <Compile Include="StateMachines\FiniteStateMachine.cs" />

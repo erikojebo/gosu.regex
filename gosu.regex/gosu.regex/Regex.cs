@@ -35,8 +35,9 @@ namespace Gosu.Regex
             {
                 var isLastChar = index == chars.Length - 1;
                 var currentChar = expression[index];
+                List<char> currentCharacterClassDefinition = null;
 
-                if ((currentChar == '*' || currentChar == '+' || currentChar == '?') && !isInEscapedState)
+                if ((currentChar == '+' || currentChar == '?') && !isInEscapedState)
                     continue;
 
                 if (currentChar == '\\')
@@ -45,10 +46,25 @@ namespace Gosu.Regex
                     continue;
                 }
 
-                if (IsNextChar('*', expression, index))
+                if (currentChar == '[')
                 {
-                    previousState.AddEdgeFor(chars[index], previousState);
+                    currentCharacterClassDefinition = chars.Skip(index).TakeWhile(x => x != ']')
+                        .Concat(new[] { ']' })
+                        .ToList();
+
+                    index += currentCharacterClassDefinition.Count - 1;
+                }
+
+                if (currentChar == '*' && !isInEscapedState)
+                {
+                    var secondLastState = _states[_states.Count - 2];
+
+                    previousState.AddFreeEdgeTo(secondLastState);
+
+                    secondLastState.IsAccepting = isLastChar;
                     previousState.IsAccepting = isLastChar;
+
+                    previousState = secondLastState;
                 }
                 else
                 {
@@ -58,14 +74,9 @@ namespace Gosu.Regex
                     {
                         previousState.AddWildcardEdgeTo(currentState);
                     }
-                    else if (currentChar == '[')
+                    else if (currentCharacterClassDefinition != null)
                     {
-                        var classDefinition = chars.Skip(index).TakeWhile(x => x != ']')
-                            .Concat(new [] { ']' })
-                            .ToList();
-
-                        index += classDefinition.Count;
-                        previousState.AddCharacterClassEdgeFor(classDefinition, currentState);
+                        previousState.AddCharacterClassEdgeFor(currentCharacterClassDefinition, currentState);
                     }
                     else
                     {

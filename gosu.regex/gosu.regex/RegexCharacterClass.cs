@@ -19,6 +19,11 @@ namespace Gosu.Regex
             return _characters.Contains(input) ^ _isNegated;
         }
 
+        public override string ToString()
+        {
+            return string.Join("", _characters);
+        }
+
         public static RegexCharacterClass Parse(IEnumerable<char> classDefinition)
         {
             var characters = new List<char>();

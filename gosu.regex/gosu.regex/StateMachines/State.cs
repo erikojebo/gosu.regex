@@ -22,26 +22,23 @@ namespace Gosu.Regex.StateMachines
 
         public void AddEdgeFor(char input, State nextState)
         {
-            _edges.Add(new Edge(input, nextState));
+            _edges.Add(new Edge(input, this, nextState));
         }
 
         public void AddFreeEdgeTo(State nextState)
         {
-            if (nextState == this)
-                throw new InvalidStateMachineException("Cannot add epsilon transision from a given state to itself, since that would open up for infinite loops in the state machine");
-
-            _edges.Add(new FreeEdge(nextState));
+            _edges.Add(new FreeEdge(this, nextState));
         }
 
         public void AddWildcardEdgeTo(State nextState)
         {
-            _edges.Add(new WildcardEdge(nextState));
+            _edges.Add(new WildcardEdge(this, nextState));
         }
 
         public void AddCharacterClassEdgeFor(IEnumerable<char> characterClassDefinition, State nextState)
         {
             var characterClass = RegexCharacterClass.Parse(characterClassDefinition);
-            _edges.Add(new CharacterClassEdge(characterClass, nextState));
+            _edges.Add(new CharacterClassEdge(characterClass, this, nextState));
         }
 
         public bool IsMatch(IEnumerable<char> input)

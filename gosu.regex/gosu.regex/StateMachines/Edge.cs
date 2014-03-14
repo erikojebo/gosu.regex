@@ -7,7 +7,7 @@ namespace Gosu.Regex.StateMachines
     {
         public readonly char Input;
 
-        public Edge(char input, State nextState) : base(nextState)
+        public Edge(char input, State startState, State nextState) : base(startState, nextState)
         {
             Input = input;
         }

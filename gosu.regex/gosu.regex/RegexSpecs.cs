@@ -48,9 +48,15 @@ namespace Gosu.Regex
         }
         
         [Test]
-        public void Single_character_with_star_operator_accepts_same_char_repeated_multiple_times()
+        public void Single_character_with_star_operator_accepts_same_char_repeated_an_odd_number_of_times()
         {
             "A*".ShouldMatch("AAA");
+        }
+        
+        [Test]
+        public void Single_character_with_star_operator_accepts_same_char_repeated_an_even_number_of_times()
+        {
+            "A*".ShouldMatch("AAAA");
         }
 
         [Test]
@@ -291,6 +297,36 @@ namespace Gosu.Regex
         public void Character_class_with_all_digits_should_not_match_letter()
         {
             "[0-9]".ShouldNotMatch("a");
+        }
+
+        [Test]
+        public void A_DIGIT_CLASS_star_B_matches_A12B()
+        {
+            "A[0-9]*B".ShouldMatch("A12B");
+        }
+        
+        [Test]
+        public void A_DIGIT_CLASS_star_B_matches_A1B()
+        {
+            "A[0-9]*B".ShouldMatch("A1B");
+        }
+        
+        [Test]
+        public void A_DIGIT_CLASS_star_B_matches_AB()
+        {
+            "A[0-9]*B".ShouldMatch("AB");
+        }
+        
+        [Test]
+        public void A_NEGATED_DIGIT_CLASS_question_mark_B_matches_AZB()
+        {
+            "A[^0-9]?B".ShouldNotMatch("AZB");
+        }
+        
+        [Test]
+        public void A_NEGATED_DIGIT_CLASS_question_mark_B_matches_AB()
+        {
+            "A[^0-9]?B".ShouldNotMatch("AB");
         }
     }
 }

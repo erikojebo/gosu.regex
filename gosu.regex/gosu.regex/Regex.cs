@@ -101,11 +101,40 @@ namespace Gosu.Regex
                 }
                 else if (currentChar == '?' && !isInEscapedState)
                 {
-                    var secondLastState = _states[_states.Count - 2];
+                    if (innerExpression != null)
+                    {
+                        var innerStartState = innerExpression._states.First();
+                        var innerEndStates = innerExpression._states.Where(x => x.IsAccepting);
 
-                    secondLastState.AddFreeEdgeTo(previousState);
+                        foreach (var state in innerExpression._states)
+                        {
+                            _states.Add(state);
+                        }
 
-                    secondLastState.IsAccepting = isLastChar;
+                        previousState.AddFreeEdgeTo(innerStartState);
+
+                        var currentState = new State();
+
+                        _states.Add(currentState);
+
+                        foreach (var innerEndState in innerEndStates)
+                        {
+                            innerEndState.AddFreeEdgeTo(currentState);
+                            innerEndState.IsAccepting = false;
+                        }
+
+                        previousState.AddFreeEdgeTo(currentState);
+
+                        previousState = currentState;
+                    }
+                    else
+                    {
+                        var secondLastState = _states[_states.Count - 2];
+
+                        secondLastState.AddFreeEdgeTo(previousState);
+
+                        secondLastState.IsAccepting = isLastChar;
+                    }
                     previousState.IsAccepting = isLastChar;
                 }
                 else if (currentChar == '+' && !isInEscapedState)

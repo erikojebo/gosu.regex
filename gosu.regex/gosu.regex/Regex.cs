@@ -110,11 +110,40 @@ namespace Gosu.Regex
                 }
                 else if (currentChar == '+' && !isInEscapedState)
                 {
-                    if (currentCharacterClassDefinition != null)
-                        previousState.AddCharacterClassEdgeFor(currentCharacterClassDefinition, previousState);
-                    else
-                        previousState.AddEdgeFor(chars[index - 1], previousState);
+                    if (innerExpression != null)
+                    {
+                        var innerStartState = innerExpression._states.First();
+                        var innerEndStates = innerExpression._states.Where(x => x.IsAccepting);
 
+                        foreach (var state in innerExpression._states)
+                        {
+                            _states.Add(state);
+                        }
+
+                        previousState.AddFreeEdgeTo(innerStartState);
+                        
+                        var currentState = new State();
+
+                        _states.Add(currentState);
+
+                        foreach (var innerEndState in innerEndStates)
+                        {
+                            innerEndState.AddFreeEdgeTo(currentState);
+                            innerEndState.IsAccepting = false;
+                        }
+
+                        currentState.AddFreeEdgeTo(previousState);
+
+                        previousState = currentState;
+                    }
+                    else
+                    {
+                        if (currentCharacterClassDefinition != null)
+                            previousState.AddCharacterClassEdgeFor(currentCharacterClassDefinition, previousState);
+                        else
+                            previousState.AddEdgeFor(chars[index - 1], previousState);
+                    }
+                    
                     previousState.IsAccepting = isLastChar;
                 }
                 else

@@ -406,5 +406,41 @@ namespace Gosu.Regex
         {
             "A(BC)*".ShouldNotMatch("AB");
         }
+        
+        [Test]
+        public void Char_followed_by_starred_parentheis_does_not_accept_first_char_followed_other_chars_not_matching_parenthesized_expression()
+        {
+            "A(BC)*".ShouldNotMatch("A123");
+        }
+
+        [Test]
+        public void Char_followed_by_parenthesis_with_plus_operator_does_not_accept_first_char_only()
+        {
+            "A(BC)+".ShouldNotMatch("A");
+        }
+
+        [Test]
+        public void Char_followed_by_parenthesis_with_plus_operator_accepts_first_char_followed_by_parenthesized_expression_repeated_once()
+        {
+            "A(BC)+".ShouldMatch("ABC");
+        }
+
+        [Test]
+        public void Char_followed_by_parenthesis_with_plus_operator_accepts_first_char_followed_by_parenthesized_expression_repeated_twice()
+        {
+            "A(BC)+".ShouldMatch("ABCBC");
+        }
+
+        [Test]
+        public void Char_followed_by_parenthesis_with_plus_operator_does_not_accept_first_char_followed_by_only_part_of_the_parenthesized_expression()
+        {
+            "A(BC)+".ShouldNotMatch("AB");
+        }
+
+        [Test]
+        public void Char_followed_by_parenthesis_with_plus_operator_does_not_accept_first_char_followed_other_chars_not_matching_parenthesized_expression()
+        {
+            "A(BC)+".ShouldNotMatch("A123");
+        }
     }
 }

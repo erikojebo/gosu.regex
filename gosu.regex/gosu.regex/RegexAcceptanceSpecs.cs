@@ -89,7 +89,6 @@ namespace Gosu.Regex
         }
 
         [Test]
-        [Ignore("not implemented yet")]
         public void Nested_parenthesis()
         {
             const string expression = "(abc(d(ef)?)*)+";

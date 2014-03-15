@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Gosu.Regex.StateMachines;
 
@@ -41,7 +42,7 @@ namespace Gosu.Regex
 
                 if (currentChar == '(')
                 {
-                    var parenthesizedExpression = ConsumeTo(')', chars, index).ToList();
+                    var parenthesizedExpression = ConsumeToBlancedEnd('(', ')', chars, index).ToList();
                     var innerExpressionChars = parenthesizedExpression.Skip(1).Take(parenthesizedExpression.Count - 2);
 
                     innerExpression = new Regex(innerExpressionChars);
@@ -60,7 +61,7 @@ namespace Gosu.Regex
 
                 if (currentChar == '[')
                 {
-                    currentCharacterClassDefinition = ConsumeTo(']', chars, index);
+                    currentCharacterClassDefinition = ConsumeToBlancedEnd('[', ']', chars, index);
 
                     index += currentCharacterClassDefinition.Count - 1;
                 }
@@ -206,11 +207,30 @@ namespace Gosu.Regex
             _states.Last().IsAccepting = true;
         }
 
-        private static List<char> ConsumeTo(char endChar, IEnumerable<char> chars, int index)
+        private static List<char> ConsumeToBlancedEnd(char startChar, char endChar, IList<char> chars, int startIndex)
         {
-            return chars.Skip(index).TakeWhile(x => x != endChar)
-                .Concat(new[] { endChar })
-                .ToList();
+            var result = new List<char>();
+
+            int level = 0;
+            
+            for (int i = startIndex; i < chars.Count; i++)
+            {
+                result.Add(chars[i]);
+
+                if (chars[i] == startChar)
+                {
+                    level++;
+                }
+                if (chars[i] == endChar)
+                {
+                    level--;
+
+                    if (level == 0)
+                        break;
+                }
+            }
+
+            return result;
         }
 
         private bool IsNextChar(char c, string expression, int index)

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Gosu.Regex.StateMachines;
 
 namespace Gosu.Regex
@@ -12,10 +9,14 @@ namespace Gosu.Regex
         private readonly FiniteStateMachine _stateMachine;
         private readonly IList<State> _states = new List<State>();
 
+        public Regex(IEnumerable<char> expression) : this(string.Join("", expression))
+        {
+        }
+
         public Regex(string expression)
         {
             CreateStates(expression);
-            
+
             _stateMachine = new FiniteStateMachine(_states);
         }
 
@@ -34,8 +35,22 @@ namespace Gosu.Regex
 
             for (int index = 0; index < chars.Length; index++)
             {
-                var isLastChar = index == chars.Length - 1;
                 var currentChar = expression[index];
+
+                Regex innerExpression = null;
+
+                if (currentChar == '(')
+                {
+                    var parenthesizedExpression = ConsumeTo(')', chars, index).ToList();
+                    var innerExpressionChars = parenthesizedExpression.Skip(1).Take(parenthesizedExpression.Count - 2);
+
+                    innerExpression = new Regex(innerExpressionChars);
+
+                    index += parenthesizedExpression.Count;
+                    currentChar = expression[index];
+                }
+
+                var isLastChar = index == chars.Length - 1;
 
                 if (currentChar == '\\')
                 {
@@ -45,23 +60,43 @@ namespace Gosu.Regex
 
                 if (currentChar == '[')
                 {
-                    currentCharacterClassDefinition = chars.Skip(index).TakeWhile(x => x != ']')
-                        .Concat(new[] { ']' })
-                        .ToList();
+                    currentCharacterClassDefinition = ConsumeTo(']', chars, index);
 
                     index += currentCharacterClassDefinition.Count - 1;
                 }
 
                 if (currentChar == '*' && !isInEscapedState)
                 {
-                    var secondLastState = _states[_states.Count - 2];
+                    if (innerExpression != null)
+                    {
+                        var innerStartState = innerExpression._states.First();
+                        var innerEndStates = innerExpression._states.Where(x => x.IsAccepting);
 
-                    previousState.AddFreeEdgeTo(secondLastState);
+                        foreach (var state in innerExpression._states)
+                        {
+                            _states.Add(state);
+                        }
 
-                    secondLastState.IsAccepting = isLastChar;
-                    previousState.IsAccepting = isLastChar;
+                        previousState.AddFreeEdgeTo(innerStartState);
 
-                    previousState = secondLastState;
+                        foreach (var innerEndState in innerEndStates)
+                        {
+                            innerEndState.AddFreeEdgeTo(previousState);
+                        }
+
+                        previousState.IsAccepting = isLastChar;
+                    }
+                    else
+                    {
+                        var secondLastState = _states[_states.Count - 2];
+
+                        previousState.AddFreeEdgeTo(secondLastState);
+
+                        secondLastState.IsAccepting = isLastChar;
+                        previousState.IsAccepting = isLastChar;
+
+                        previousState = secondLastState;
+                    }
                 }
                 else if (currentChar == '?' && !isInEscapedState)
                 {
@@ -95,7 +130,7 @@ namespace Gosu.Regex
                     }
                     else
                     {
-                        previousState.AddEdgeFor(currentChar, currentState);                        
+                        previousState.AddEdgeFor(currentChar, currentState);
                     }
 
                     _states.Add(currentState);
@@ -110,6 +145,13 @@ namespace Gosu.Regex
             }
 
             _states.Last().IsAccepting = true;
+        }
+
+        private static List<char> ConsumeTo(char endChar, IEnumerable<char> chars, int index)
+        {
+            return chars.Skip(index).TakeWhile(x => x != endChar)
+                .Concat(new[] { endChar })
+                .ToList();
         }
 
         private bool IsNextChar(char c, string expression, int index)

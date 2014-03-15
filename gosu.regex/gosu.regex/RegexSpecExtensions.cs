@@ -28,7 +28,7 @@ namespace Gosu.Regex
         {
             var actual = expression.IsMatch(input);
 
-            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(expected, actual);
         }
     }
 }

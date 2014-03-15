@@ -382,5 +382,29 @@ namespace Gosu.Regex
         {
             "A[^0-9]+B".ShouldMatch("A%&)B");
         }
+
+        [Test]
+        public void Char_followed_by_starred_parentheis_accepts_first_char_only()
+        {
+            "A(BC)*".ShouldMatch("A");
+        }
+        
+        [Test]
+        public void Char_followed_by_starred_parentheis_accepts_first_char_followed_by_parenthesized_expression_repeated_once()
+        {
+            "A(BC)*".ShouldMatch("ABC");
+        }
+        
+        [Test]
+        public void Char_followed_by_starred_parentheis_accepts_first_char_followed_by_parenthesized_expression_repeated_twice()
+        {
+            "A(BC)*".ShouldMatch("ABCBC");
+        }
+
+        [Test]
+        public void Char_followed_by_starred_parentheis_does_not_accept_first_char_followed_by_only_part_of_the_parenthesized_expression()
+        {
+            "A(BC)*".ShouldNotMatch("AB");
+        }
     }
 }

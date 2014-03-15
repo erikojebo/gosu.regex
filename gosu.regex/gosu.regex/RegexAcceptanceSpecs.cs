@@ -15,6 +15,17 @@ namespace Gosu.Regex
             phoneNumberExpression.ShouldNotMatch("+4670-1234-567");
             phoneNumberExpression.ShouldNotMatch("+4670");
         }
+        
+        [Test]
+        public void Swedish_phone_number_with_optional_country_code()
+        {
+            const string phoneNumberExpression = "(\\+[0-9]+)?[0-9]+-[0-9]+";
+
+            phoneNumberExpression.ShouldMatch("+4670-1234567");
+            phoneNumberExpression.ShouldMatch("070-1234567");
+            phoneNumberExpression.ShouldNotMatch("+4670-1234-567");
+            phoneNumberExpression.ShouldNotMatch("+4670");
+        }
 
         [Test]
         public void CSharp_identifier()
@@ -39,6 +50,27 @@ namespace Gosu.Regex
         public void Simple_email_format_using_starred_parenthesis()
         {
             const string expression = "[a-zA-Z0-9_\\-]+(\\.[a-zA-Z0-9_\\-]+)*@[a-zA-Z0-9_\\-]+\\.[a-zA-Z0-9_\\-]+(\\.[a-zA-Z0-9_\\-]+)*";
+
+            expression.ShouldMatch("foo@bar.baz");
+            expression.ShouldMatch("kalle@gmail.com");
+            expression.ShouldMatch("kalle.svensson@gmail.com");
+            expression.ShouldMatch("kalle.svensson@sub.domain.com");
+            expression.ShouldMatch("svensson@experts-exchange.com");
+            expression.ShouldMatch("kalle73@hotmail.com");
+            expression.ShouldMatch("kalle_73@hotmail.com");
+
+            expression.ShouldNotMatch("kalle.svensson");
+            expression.ShouldNotMatch("kalle.svensson@");
+            expression.ShouldNotMatch("kalle.svensson@gmail");
+            expression.ShouldNotMatch("kalle.svensson@gmail.");
+            expression.ShouldNotMatch("@gmail.com");
+            expression.ShouldNotMatch("@gmail.");
+        }
+
+        [Test]
+        public void Simple_email_format()
+        {
+            const string expression = "[a-zA-Z0-9_\\-]+(\\.[a-zA-Z0-9_\\-]+)*@[a-zA-Z0-9_\\-]+(\\.[a-zA-Z0-9_\\-]+)+";
 
             expression.ShouldMatch("foo@bar.baz");
             expression.ShouldMatch("kalle@gmail.com");

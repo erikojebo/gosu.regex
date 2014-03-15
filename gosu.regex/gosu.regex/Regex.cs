@@ -82,6 +82,7 @@ namespace Gosu.Regex
                         foreach (var innerEndState in innerEndStates)
                         {
                             innerEndState.AddFreeEdgeTo(previousState);
+                            innerEndState.IsAccepting = false;
                         }
 
                         previousState.IsAccepting = isLastChar;

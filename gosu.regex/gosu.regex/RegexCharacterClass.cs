@@ -45,10 +45,13 @@ namespace Gosu.Regex
             
             for (int i = 0; i < classContent.Count; i++)
             {
+                char? previousChar = i > 0 ? classContent[i - 1] : (char?)null;
                 var currentChar = classContent[i];
                 var isFirstChar = i == 0;
 
-                if (currentChar == '-' && !isFirstChar)
+                var isEscaped = previousChar == '\\';
+
+                if (currentChar == '-' && !isFirstChar && !isEscaped)
                 {
                     var rangeStartChar = classContent[i - 1];
                     var rangeEndChar = classContent[i + 1];

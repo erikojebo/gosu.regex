@@ -36,6 +36,27 @@ namespace Gosu.Regex
         }
 
         [Test]
+        public void Simple_email_format_using_starred_parenthesis()
+        {
+            const string expression = "[a-zA-Z0-9_\\-]+(\\.[a-zA-Z0-9_\\-]+)*@[a-zA-Z0-9_\\-]+\\.[a-zA-Z0-9_\\-]+(\\.[a-zA-Z0-9_\\-]+)*";
+
+            expression.ShouldMatch("foo@bar.baz");
+            expression.ShouldMatch("kalle@gmail.com");
+            expression.ShouldMatch("kalle.svensson@gmail.com");
+            expression.ShouldMatch("kalle.svensson@sub.domain.com");
+            expression.ShouldMatch("svensson@experts-exchange.com");
+            expression.ShouldMatch("kalle73@hotmail.com");
+            expression.ShouldMatch("kalle_73@hotmail.com");
+
+            expression.ShouldNotMatch("kalle.svensson");
+            expression.ShouldNotMatch("kalle.svensson@");
+            expression.ShouldNotMatch("kalle.svensson@gmail");
+            expression.ShouldNotMatch("kalle.svensson@gmail.");
+            expression.ShouldNotMatch("@gmail.com");
+            expression.ShouldNotMatch("@gmail.");
+        }
+
+        [Test]
         [Ignore("not implemented yet")]
         public void Nested_parenthesis()
         {
